@@ -4,6 +4,7 @@ import org.openqa.selenium.WebElement;
 import org.openqa.selenium.chrome.ChromeDriver;
 import org.openqa.selenium.interactions.Actions;
 import org.openqa.selenium.remote.RemoteWebElement;
+import org.openqa.selenium.support.ui.Select;
 import org.testng.Assert;
 import org.testng.annotations.Test;
 
@@ -38,16 +39,13 @@ public class ZipCodeTest extends Base {
     @Test
     public void dropDown() {
         driver.get("http://the-internet.herokuapp.com/dropdown");
-        driver.findElement(By.id("dropdown")).getAttribute("selected");
-        driver.findElement(By.id("dropdown")).click();
-        driver.findElement(By.cssSelector("[value='1']")).getAttribute("");
-        driver.findElement(By.cssSelector("[value='1']")).click();
-        driver.findElement(By.cssSelector("[value='1']")).getAttribute("selected");
-        Assert.assertEquals("selected", "selected");
-        driver.findElement(By.cssSelector("[value='2']")).getAttribute("");
-        driver.findElement(By.cssSelector("[value='2']")).click();
-        driver.findElement(By.cssSelector("[value='2']")).getAttribute("selected");
-        Assert.assertEquals("selected", "selected");
+        Select dropDown = new Select(driver.findElement(By.id("dropdown")));
+        dropDown.selectByValue("1");
+        String nameFirstElement = dropDown.getFirstSelectedOption().getText();
+        Assert.assertEquals(nameFirstElement,"Option 1", "Not select");
+        dropDown.selectByValue("2");
+        String nameSecondElement = dropDown.getFirstSelectedOption().getText();
+        Assert.assertEquals(nameSecondElement,"Option 2", "Not select");
     }
 
     @Test
@@ -70,7 +68,12 @@ public class ZipCodeTest extends Base {
         for (char i = 'a'; i <= 'z'; i++) {
             abc.add(i);
         }
+//        element.sendKeys("abc");
+////        for (Character i:abc) {
+////            element.sendKeys(i);
+//        Assert.assertEquals(element.getText().getBytes(),"abc");
     }
+
 
     @Test
     public void dataTables() {
@@ -87,7 +90,7 @@ public class ZipCodeTest extends Base {
     public void typos() {
         driver.get("http://the-internet.herokuapp.com/typos");
         WebElement element = driver.findElementByXPath("//*[@id=\"content\"]/div/p[2]");
-        Assert.assertEquals("Sometimes you'll see a typo, other times you won't.", element.getText());
+        Assert.assertEquals(element.getText(), "Sometimes you'll see a typo, other times you won't.");
     }
 
     @Test
@@ -98,33 +101,33 @@ public class ZipCodeTest extends Base {
         WebElement element1 = driver.findElementByXPath("//*[@id=\"content\"]/div/div[1]/img");
         action.moveToElement(element1).moveToElement(driver.findElement(By.xpath("//*[@id=\"content\"]/div/div[1]/img"))).click().build().perform();
         WebElement elementName = driver.findElementByXPath("//*[@id=\"content\"]/div/div[1]/div/h5");
-        Assert.assertEquals("name: user1", elementName.getText());
+        Assert.assertEquals(elementName.getText(), "name: user1");
         WebElement elementUrlClick = driver.findElementByXPath("//*[@id=\"content\"]/div/div[1]/div/a");
         elementUrlClick.click();
         WebElement element404 = driver.findElementByXPath("/html/body/h1");
-        Assert.assertEquals("Not Found", element404.getText());
+        Assert.assertEquals(element404.getText(), "Not Found");
         driver.navigate().back();
 
         Actions action2 = new Actions(driver);
         WebElement element2 = driver.findElementByXPath("//*[@id=\"content\"]/div/div[2]/img");
         action2.moveToElement(element2).moveToElement(driver.findElement(By.xpath("//*[@id=\"content\"]/div/div[2]/img"))).click().build().perform();
         WebElement elementName2 = driver.findElementByXPath("//*[@id=\"content\"]/div/div[2]/div/h5");
-        Assert.assertEquals("name: user2", elementName2.getText());
+        Assert.assertEquals(elementName2.getText(), "name: user2");
         WebElement elementUrlClick2 = driver.findElementByXPath("//*[@id=\"content\"]/div/div[2]/div/a");
         elementUrlClick2.click();
         WebElement element404second = driver.findElementByXPath("/html/body/h1");
-        Assert.assertEquals("Not Found", element404second.getText());
+        Assert.assertEquals(element404second.getText(), "Not Found");
         driver.navigate().back();
 
         Actions action3 = new Actions(driver);
         WebElement element3 = driver.findElementByXPath("//*[@id=\"content\"]/div/div[3]/img");
         action3.moveToElement(element3).moveToElement(driver.findElement(By.xpath("//*[@id=\"content\"]/div/div[3]/img"))).click().build().perform();
         WebElement elementName3 = driver.findElementByXPath("//*[@id=\"content\"]/div/div[3]/div/h5");
-        Assert.assertEquals("name: user3", elementName3.getText());
+        Assert.assertEquals(elementName3.getText(), "name: user3");
         WebElement elementUrlClick3 = driver.findElementByXPath("//*[@id=\"content\"]/div/div[3]/div/a");
         elementUrlClick3.click();
         WebElement element404third = driver.findElementByXPath("/html/body/h1");
-        Assert.assertEquals("Not Found", element404third.getText());
+        Assert.assertEquals(element404third.getText(), "Not Found");
     }
 
     @Test
@@ -134,6 +137,6 @@ public class ZipCodeTest extends Base {
         element.click();
         driver.manage().timeouts().implicitlyWait(15, TimeUnit.SECONDS);
         WebElement el = driver.findElementByXPath("//*[@id=\"flash\"]");
-        Assert.assertEquals("Action successful\n" + "×", el.getText());
+        Assert.assertEquals(el.getText(), "Action successful\n" + "×");
     }
 }
